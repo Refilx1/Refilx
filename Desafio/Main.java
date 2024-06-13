@@ -16,7 +16,7 @@ class Hacker extends Thread {
             String tentativaSenha = gerarSenhaAleatoria();
             tentativa++;
             System.out.println("Hacker " + hackerId + " tentativa " + tentativa + ": " + tentativaSenha);
-            if (tentativaSenha.equals("55")) {
+            if (tentativaSenha.equals("89")) {
                 cofreAberto = true;
                 System.out.println("Hacker " + hackerId + " abriu o cofre com a senha " + tentativaSenha + "!");
                 policial.interrupt(); 

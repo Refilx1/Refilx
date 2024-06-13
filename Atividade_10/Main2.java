@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main2 {
-    public static final String ARQUIVO_ORIGEM = "/resources/many-flowers.jpg"; // Caminho da imagem de origem
-    public static final String ARQUIVO_DESTINO = "/out/many-flowers.jpg"; // Caminho da imagem de destino
+    public static final String ARQUIVO_ORIGEM = "Atividade_10\\images\\many-flowers.jpg"; // Caminho da imagem de origem
+    public static final String ARQUIVO_DESTINO = "Atividade_10\\images\\many-flowers.jpg"; // Caminho da imagem de destino
 
     public static void main(String[] args) throws IOException {
         BufferedImage ImagemOriginal = ImageIO.read(new File(ARQUIVO_ORIGEM));
