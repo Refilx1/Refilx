@@ -16,7 +16,7 @@ class Hacker extends Thread {
             String tentativaSenha = gerarSenhaAleatoria();
             tentativa++;
             System.out.println("Hacker " + hackerId + " tentativa " + tentativa + ": " + tentativaSenha);
-            if (tentativaSenha.equals("89")) {
+            if (tentativaSenha.equals("899")) {
                 cofreAberto = true;
                 System.out.println("Hacker " + hackerId + " abriu o cofre com a senha " + tentativaSenha + "!");
                 policial.interrupt(); 
@@ -34,7 +34,7 @@ class Hacker extends Thread {
     private String gerarSenhaAleatoria() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             sb.append(random.nextInt(10));
         }
         return sb.toString();
@@ -58,7 +58,7 @@ class Hacker extends Thread {
 
 class Policial extends Thread {
     public void run() {
-        for (int i = 10; i > 0; i--) {
+        for (int i = 60; i > 0; i--) {
             System.out.println("Policial chegará em " + i + " segundos.");
             try {
                 Thread.sleep(1000);
