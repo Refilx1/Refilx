@@ -19,7 +19,7 @@ public class Main2 {
         
         // recolorirUmaThread(ImagemOriginal, ImagemResultado); // Descomente para testar com uma thread
         
-        int numberOfThreads = 6; // Defina o número de threads desejado
+        int numberOfThreads = 1; // Defina o número de threads desejado
         recolorMultithreaded(ImagemOriginal, ImagemResultado, numberOfThreads); // Processamento multi-threaded
         
         // recolorFracionado(ImagemOriginal, ImagemResultado, numberOfThreads); // Descomente para testar processamento fracionado
