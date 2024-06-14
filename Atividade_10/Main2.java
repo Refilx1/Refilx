@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Main2 {
     public static final String ARQUIVO_ORIGEM = "Atividade_10\\images\\many-flowers.jpg"; // Caminho da imagem de origem
-    public static final String ARQUIVO_DESTINO = "Atividade_10\\images\\many-flowers.jpg"; // Caminho da imagem de destino
+    public static final String ARQUIVO_DESTINO = "Atividade_10\\images\\many-flowers-result.jpg"; // Caminho da imagem de destino
 
     public static void main(String[] args) throws IOException {
         BufferedImage ImagemOriginal = ImageIO.read(new File(ARQUIVO_ORIGEM));
@@ -19,7 +19,7 @@ public class Main2 {
         
         // recolorirUmaThread(ImagemOriginal, ImagemResultado); // Descomente para testar com uma thread
         
-        int numberOfThreads = 1; // Defina o número de threads desejado
+        int numberOfThreads = 4; // Defina o número de threads desejado
         recolorMultithreaded(ImagemOriginal, ImagemResultado, numberOfThreads); // Processamento multi-threaded
         
         // recolorFracionado(ImagemOriginal, ImagemResultado, numberOfThreads); // Descomente para testar processamento fracionado
@@ -92,25 +92,25 @@ public class Main2 {
 
     public static void recolorirPixel(BufferedImage ImagemOriginal, BufferedImage ImagemResultado, int x, int y) {
         int rgb = ImagemOriginal.getRGB(x, y);
-
+    
         int red = getRed(rgb);
         int green = getGreen(rgb);
         int blue = getBlue(rgb);
-
-        int newRed;
-        int newGreen;
-        int newBlue;
-
-        if (ehNivelDeCinza(red, green, blue)) {
-            newRed = Math.min(255, red + 100);
-            newGreen = Math.max(0, green - 20);
-            newBlue = Math.max(0, blue - 120);
-        } else {
-            newRed = red;
-            newGreen = green;
-            newBlue = blue;
+    
+        int newRed = red;
+        int newGreen = green;
+        int newBlue = blue;
+    
+        if (isWhite(red, green, blue)) {
+            newRed = 102;
+            newGreen = 255;
+            newBlue = 51;
+        } else if (isPurple(red, green, blue)) { // Se for roxo, troca para amarelo
+            newRed = 102;
+            newGreen = 255;
+            newBlue = 51;
         }
-
+    
         int newRGB = createRGBFromColors(newRed, newGreen, newBlue);
         setRGB(ImagemResultado, x, y, newRGB);
     }
@@ -119,8 +119,12 @@ public class Main2 {
         image.getRaster().setDataElements(x, y, image.getColorModel().getDataElements(rgb, null));
     }
 
-    public static boolean ehNivelDeCinza(int red, int green, int blue) {
-        return Math.abs(red - green) < 30 && Math.abs(red - blue) < 30 && Math.abs(green - blue) < 30;
+    public static boolean isPurple(int red, int green, int blue) {
+        return red > 100 && green < 100 && blue > 100;
+    }
+
+    public static boolean isWhite(int red, int green, int blue) {
+        return red > 200 && green > 200 && blue > 200;
     }
 
     public static int createRGBFromColors(int red, int green, int blue) {
