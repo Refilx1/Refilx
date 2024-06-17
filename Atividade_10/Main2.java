@@ -7,44 +7,48 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main2 {
-    public static final String ARQUIVO_ORIGEM = "Atividade_10\\images\\many-flowers.jpg"; // Caminho da imagem de origem
-    public static final String ARQUIVO_DESTINO = "Atividade_10\\images\\many-flowers-result.jpg"; // Caminho da imagem de destino
+
+public class Main2{
+public static final String ARQUIVO_ORIGEM = "Atividade_10\\images\\many-flowers.jpg";
+public static final String ARQUIVO_DESTINO = "Atividade_10\\images\\many-flowers-result.jpg";
 
     public static void main(String[] args) throws IOException {
+
         BufferedImage ImagemOriginal = ImageIO.read(new File(ARQUIVO_ORIGEM));
         BufferedImage ImagemResultado = new BufferedImage(ImagemOriginal.getWidth(), ImagemOriginal.getHeight(), BufferedImage.TYPE_INT_RGB);
 
-        long startTime = System.currentTimeMillis(); // Medição do tempo inicial
+        long startTime = System.currentTimeMillis();
+        //recolorirUmaThread(ImagemOriginal, ImagemResultado);
+        int numberOfThreads = 6;
+        recolorMultithreaded(ImagemOriginal, ImagemResultado, numberOfThreads);
+        //recolorFracionado(ImagemOriginal, ImagemResultado, numberOfThreads);
+   
+        long endTime = System.currentTimeMillis();
         
-        // recolorirUmaThread(ImagemOriginal, ImagemResultado); // Descomente para testar com uma thread
+        long duration = endTime - startTime;
         
-        int numberOfThreads = 5; // Defina o número de threads desejado
-        recolorMultithreaded(ImagemOriginal, ImagemResultado, numberOfThreads); // Processamento multi-threaded
-        
-        // recolorFracionado(ImagemOriginal, ImagemResultado, numberOfThreads); // Descomente para testar processamento fracionado
-
-        long endTime = System.currentTimeMillis(); // Medição do tempo final
-        
-        long duration = endTime - startTime; // Cálculo da duração
-        
-        File outputFile = new File(ARQUIVO_DESTINO); // Salva a imagem resultante
+       
+  
+        File outputFile = new File(ARQUIVO_DESTINO);
         ImageIO.write(ImagemResultado, "jpg", outputFile);
         
-        System.out.println(String.valueOf(duration)); // Exibe a duração do processamento
-    }
+        System.out.println(String.valueOf(duration));
 
+       
+    }
+    
     public static void recolorFracionado(BufferedImage ImagemOriginal, BufferedImage ImagemResultado, int partes) {
-        int width = ImagemOriginal.getWidth();
-        int height = ImagemOriginal.getHeight() / partes;
-        
-        for (int i = 0; i < partes; i++) {
-            final int multiplicadorInicio = i;
-            int xInicio = 0;
-            int yInicio = height * multiplicadorInicio;
-            
-            recolorirImagem(ImagemOriginal, ImagemResultado, xInicio, yInicio, width, height);
-        }
+    	int width = ImagemOriginal.getWidth();
+    	int height = ImagemOriginal.getHeight()/partes;
+    	
+    	for(int i = 0; i < partes; i++) {
+    		final int multiplicadorInicio = i;
+    		int xInicio = 0;
+    		int yInicio = height*multiplicadorInicio;
+    		
+    		recolorirImagem(ImagemOriginal, ImagemResultado, xInicio, yInicio, width, height);
+    	}
+    	
     }
     
     public static void recolorMultithreaded(BufferedImage ImagemOriginal, BufferedImage ImagemResultado, int numberOfThreads) {
@@ -52,11 +56,11 @@ public class Main2 {
         int width = ImagemOriginal.getWidth();
         int height = ImagemOriginal.getHeight() / numberOfThreads;
 
-        for (int i = 0; i < numberOfThreads; i++) {
+        for(int i = 0; i < numberOfThreads ; i++) {
             final int threadMultiplier = i;
 
             Thread thread = new Thread(() -> {
-                int xOrigin = 0;
+                int xOrigin = 0 ;
                 int yOrigin = height * threadMultiplier;
 
                 recolorirImagem(ImagemOriginal, ImagemResultado, xOrigin, yOrigin, width, height);
@@ -65,15 +69,14 @@ public class Main2 {
             threads.add(thread);
         }
 
-        for (Thread thread : threads) {
+        for(Thread thread : threads) {
             thread.start();
         }
 
-        for (Thread thread : threads) {
+        for(Thread thread : threads) {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -82,35 +85,39 @@ public class Main2 {
         recolorirImagem(ImagemOriginal, ImagemResultado, 0, 0, ImagemOriginal.getWidth(), ImagemOriginal.getHeight());
     }
 
-    public static void recolorirImagem(BufferedImage ImagemOriginal, BufferedImage ImagemResultado, int leftCorner, int topCorner, int width, int height) {
-        for (int x = leftCorner; x < leftCorner + width && x < ImagemOriginal.getWidth(); x++) {
-            for (int y = topCorner; y < topCorner + height && y < ImagemOriginal.getHeight(); y++) {
-                recolorirPixel(ImagemOriginal, ImagemResultado, x, y);
+    public static void recolorirImagem(BufferedImage ImagemOriginal, BufferedImage ImagemResultado, int leftCorner, int topCorner,
+                                    int width, int height) {
+        for(int x = leftCorner ; x < leftCorner + width && x < ImagemOriginal.getWidth() ; x++) {
+            for(int y = topCorner ; y < topCorner + height && y < ImagemOriginal.getHeight() ; y++) {
+                recolorirPixel(ImagemOriginal, ImagemResultado, x , y);
             }
         }
     }
 
     public static void recolorirPixel(BufferedImage ImagemOriginal, BufferedImage ImagemResultado, int x, int y) {
         int rgb = ImagemOriginal.getRGB(x, y);
-    
+
         int red = getRed(rgb);
         int green = getGreen(rgb);
         int blue = getBlue(rgb);
-    
-        int newRed = red;
-        int newGreen = green;
-        int newBlue = blue;
-    
-        if (isWhite(red, green, blue)) {
-            newRed = 102;
-            newGreen = 255;
-            newBlue = 51;
-        } else if (isPurple(red, green, blue)) { // Se for roxo, troca para amarelo
-            newRed = 102;
-            newGreen = 255;
-            newBlue = 51;
+
+        int newRed;
+        int newGreen;
+        int newBlue;
+	//aqui vamos popular os novos pixels
+	//se o pixel em quest�o for um tom de cinza, vamos aumentar o n�vel de vermelho em 10; o de verde diminuir 80, azul dimiuir 20
+        if(ehNivelDeCinza(red, green, blue)) {
+	    //para n�o exceder o valor m�ximo (255) pegamos o min
+            newRed = Math.min(255, red + 100);
+            newGreen = Math.max(0, green - 20);
+            //para n�o passar o 0 pegamos o max
+            newBlue = Math.max(0, blue - 120);
+        } else {
+            newRed = red;
+            newGreen = green;
+            newBlue = blue;
         }
-    
+        //M�todo para setar valor rgb na coordenada do pixel da imagem
         int newRGB = createRGBFromColors(newRed, newGreen, newBlue);
         setRGB(ImagemResultado, x, y, newRGB);
     }
@@ -118,20 +125,19 @@ public class Main2 {
     public static void setRGB(BufferedImage image, int x, int y, int rgb) {
         image.getRaster().setDataElements(x, y, image.getColorModel().getDataElements(rgb, null));
     }
-
-    public static boolean isPurple(int red, int green, int blue) {
-        return red > 100 && green < 100 && blue > 100;
-    }
-
-    public static boolean isWhite(int red, int green, int blue) {
-        return red > 200 && green > 200 && blue > 200;
+    //metodo para verificar se o pixel � tom de cinza (estar� na parte branca da flor)
+    //Checa se todos os componentes tem uma intensidade similar (< 30 - determinado empiricamente)
+    public static boolean ehNivelDeCinza(int red, int green, int blue) {
+        return Math.abs(red - green) < 30 && Math.abs(red - blue) < 30 && Math.abs( green - blue) < 30;
     }
 
     public static int createRGBFromColors(int red, int green, int blue) {
         int rgb = 0;
+        //opera��o de OR deslocando para esquerda em cada cor
         rgb |= blue;
         rgb |= green << 8;
         rgb |= red << 16;
+
         rgb |= 0xFF000000;
 
         return rgb;
