@@ -19,7 +19,7 @@ public static final String ARQUIVO_DESTINO = "Atividade_10\\images\\many-flowers
 
         long startTime = System.currentTimeMillis();
         //recolorirUmaThread(ImagemOriginal, ImagemResultado);
-        int numberOfThreads = 6;
+        int numberOfThreads = 5;
         recolorMultithreaded(ImagemOriginal, ImagemResultado, numberOfThreads);
         //recolorFracionado(ImagemOriginal, ImagemResultado, numberOfThreads);
    
@@ -108,10 +108,10 @@ public static final String ARQUIVO_DESTINO = "Atividade_10\\images\\many-flowers
 	//se o pixel em quest�o for um tom de cinza, vamos aumentar o n�vel de vermelho em 10; o de verde diminuir 80, azul dimiuir 20
         if(ehNivelDeCinza(red, green, blue)) {
 	    //para n�o exceder o valor m�ximo (255) pegamos o min
-            newRed = Math.min(255, red + 100);
-            newGreen = Math.max(0, green - 20);
+            newRed = Math.min(150, red + 0);
+            newGreen = Math.max(0, green - 100);
             //para n�o passar o 0 pegamos o max
-            newBlue = Math.max(0, blue - 120);
+            newBlue = Math.max(0, blue - 100);
         } else {
             newRed = red;
             newGreen = green;

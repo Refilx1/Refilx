@@ -12,7 +12,7 @@ public class ImageRecolor {
         BufferedImage image = ImageIO.read(input);
 
         // Número de threads (pode ajustar conforme necessário)
-        int numThreads = 4;
+        int numThreads = 5;
         int width = image.getWidth();
         int height = image.getHeight();
         int partHeight = height / numThreads;
